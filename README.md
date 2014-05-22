@@ -1,4 +1,3 @@
-bosh-mediator
-=============
+## BOSH mediator
 
-bosh-mediator
+Code to automate BOSH deployments

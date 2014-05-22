@@ -1,0 +1,64 @@
+---
+packages:
+- name: configure_jenkins
+  version: 0.3-dev
+  sha1: !binary |-
+    MTA1MTE0Y2MxMjY1NTI3ZWY2Y2E0ODRiYzM0NzRmYzllMDg5MjcyNQ==
+  fingerprint: !binary |-
+    M2JlZjViZmQ1MWU5MTc3ZGNjZTc2MWUxZjI3YjVlYjcxMDU0NDAxNQ==
+  dependencies:
+  - ruby
+- name: git
+  version: 0.1-dev
+  sha1: !binary |-
+    ZmU4MDY3NTEwYjI4ZjdhYjZhMmIyNjUxNDJhYTA1OGZmNzJkYmY3MA==
+  fingerprint: !binary |-
+    OGFkYjdlMTRkZmJmMzViNTRmZmMwOTQyMDZmNjZlYTE0MTE3YmNiMA==
+  dependencies: []
+- name: jenkins
+  version: 1.1-dev
+  sha1: !binary |-
+    OTdkODJmYTU0Mjg2MGQ2Yjg4ZjFmMDk3NDQwZDA3ZGY0OGU3OWFhNA==
+  fingerprint: !binary |-
+    YmU0OGJhZjAyYTU2ZDg1ZDhiNjZlZWZjZGQxODFjMzlmYmM3YTQxNg==
+  dependencies: []
+- name: jre
+  version: 1
+  sha1: !binary |-
+    ZTc2NTY5YTNmNTNhNzAyOTAzYTVjYjU5NTVhMTE1MzA0MTlkYmU1OQ==
+  fingerprint: !binary |-
+    MWZhZTg2MjRmNjRjMjcyZGM3MzQ5ODZmOTU5NDVjMDk3MmU0MjZlMw==
+  dependencies: []
+- name: libyaml
+  version: 0.1-dev
+  sha1: !binary |-
+    YTY5ZGEzMGQ1ZjFhYzExZjgzNWI3NjhjYzc5ODk4M2M3MWVlODZmYg==
+  fingerprint: !binary |-
+    ODcwNmY2MTM1NTZmMWFlYmVlNzI5NDk1NjYyNmQ3MDYxZmIyZmE1ZA==
+  dependencies: []
+- name: nginx
+  version: 1
+  sha1: !binary |-
+    MTBiMWVhZWQ1YjUwNTI2MDYzM2E3YzNiMzg2NDJiYWQ1ZDQ0ZjI1NQ==
+  fingerprint: !binary |-
+    MjZkODg1ZTYzMTg1NDgzZGQ3MDg1OWJlZDVhMGYxNDIzMmYyM2UxOA==
+  dependencies: []
+- name: ruby
+  version: 0.1-dev
+  sha1: !binary |-
+    OTNmZWZmNDg2NjE0OTAzMGQ3MjZjMGY5YzE1YjllOTIzOTYwZGMxYQ==
+  fingerprint: !binary |-
+    MGNlZTMwYTYwNmQ4NjI3NzdmYWY4NDZhYzQ4NDhjZTE4NjY1YzA5OQ==
+  dependencies:
+  - libyaml
+jobs:
+- name: jenkins_master
+  version: 1.3-dev
+  fingerprint: !binary |-
+    N2YzMTA4YTU0MjJjMjUwNmUyZWMyOGVlMDVmNDg2ZDk0M2Y2MDZlMA==
+  sha1: !binary |-
+    MTgyMjU4MWI2YzdlOTA3ZGI2N2ZiN2VmNGI1OTRkYmJjYzQxOGJlNg==
+commit_hash: 44ebeac0
+uncommitted_changes: true
+name: jenkins
+version: some crazy releae version
