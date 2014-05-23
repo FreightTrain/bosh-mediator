@@ -61,4 +61,4 @@ jobs:
 commit_hash: 44ebeac0
 uncommitted_changes: true
 name: jenkins
-version: 1.4-dev
+version: 1.4

@@ -35,7 +35,7 @@ module BoshMediator
         begin
           s_version = 'new_version'
           s_name = 'new_name'
-          release_version = YAML.load_file(File.join(assets_dir, 'existing_release_file.yml'))['version']
+          release_version = YAML.load_file(File.join(assets_dir, 'existing_release_file.yml'))['version'].to_s
 
           FileUtils.copy_file(manifest_file, test_manifest)
 

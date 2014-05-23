@@ -45,7 +45,7 @@ module BoshMediator
       let(:expected_release_array) do
         [{'name'=>'bosh-release',
           'release_versions'=>
-           [{'version'=>'0.13-dev',
+           [{'version'=>'0.13',
              'commit_hash'=>'b6729f79',
              'uncommitted_changes'=>true,
              'currently_deployed'=>true,
@@ -65,22 +65,22 @@ module BoshMediator
             }]},
          {'name'=>'jenkins',
           'release_versions'=>
-           [{'version'=>'1.1-dev',
+           [{'version'=>'1.1',
              'commit_hash'=>'6a1818aa',
              'uncommitted_changes'=>true,
              'currently_deployed'=>false,
              'job_names'=>['jenkins_master']},
-            {'version'=>'1.2-dev',
+            {'version'=>'1.2',
              'commit_hash'=>'7c800642',
              'uncommitted_changes'=>true,
              'currently_deployed'=>false,
              'job_names'=>['jenkins_master']},
-            {'version'=>'1.3-dev',
+            {'version'=>'1.3',
              'commit_hash'=>'6cf0bd94',
              'uncommitted_changes'=>true,
              'currently_deployed'=>false,
              'job_names'=>['jenkins_master']},
-            {'version'=>'1.4-dev',
+            {'version'=>'1.4',
              'commit_hash'=>'44ebeac0',
              'uncommitted_changes'=>true,
              'currently_deployed'=>true,
@@ -90,6 +90,7 @@ module BoshMediator
       it 'does not attempt to upload a release that already exists in the bosh director by name and version' do
         test_release_file_name = "#{assets_dir}/existing_release_file.yml"
         @bosh_director.should_receive(:list_releases).and_return(expected_release_array)
+        allow(@release_command).to receive(:options).and_return({})
         @mediator.upload_release(test_release_file_name)
       end
 

@@ -18,10 +18,20 @@ module BoshMediator
       release_name = yaml['name']
       release_version = yaml['version']
 
-      unless bosh_contains_release?(release_name, release_version, director_releases)
-        @release_command.upload(release_file)
-        BoshMediator.raise_on_error! @release_command
+      if dev_release?(release_version)
+        @release_command.options.merge!({:rebase => true})
       end
+
+      if dev_release?(release_version) || ! bosh_contains_release?(release_name, release_version, director_releases)
+        @release_command.upload(release_file)
+        unless dev_release?(release_version)
+          BoshMediator.raise_on_error! @release_command
+        end
+      end
+    end
+
+    def dev_release?(release_version)
+      release_version.to_s.end_with?('dev')
     end
 
     def upload_dev_release(release_directory)
