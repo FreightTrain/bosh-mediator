@@ -18,6 +18,7 @@ module BoshMediator
       @bosh_director = options[:director]
       @release_command = options[:release_command]
       @deployment_command = options[:deployment_command]
+      @errand_command = options[:errand_command]
       @release_manager = options[:release_manager] || ReleaseManager.new(options)
       @stemcell_manager = options[:stemcell_manager] || StemcellResourceManager.new
       Bosh::Cli::Config.output = STDOUT
@@ -60,6 +61,12 @@ module BoshMediator
 
     def set_manifest_file(manifest_file)
       @deployment_command.options.merge!(:config => manifest_file, :deployment => manifest_file)
+      @errand_command.options.merge!(:config => manifest_file, :deployment => manifest_file)
+    end
+
+    def run_errand(name)
+      @errand_command.run_errand(name)
+      BoshMediator.raise_on_error! @errand_command
     end
 
     def self.raise_on_error!(bosh_cmd)

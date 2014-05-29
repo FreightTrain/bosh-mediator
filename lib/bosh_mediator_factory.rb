@@ -19,7 +19,8 @@ module BoshMediator
 
       BoshMediator.new(:director => bosh_director,
                        :release_command => release_command(options),
-                       :deployment_command => deployment_command)
+                       :deployment_command => deployment_command,
+                       :errand_command => errand_command(:target => bosh_director_uri, :username => username, :password => password))
     end
 
     def create_local_bosh_mediator(release_dir)
@@ -41,6 +42,12 @@ module BoshMediator
       options.merge!(:force => true, :with_tarball => true)
       release_command.options = options
       release_command
+    end
+
+    def errand_command(options ={})
+      errand_command = Bosh::Cli::Command::Errand.new
+      errand_command.options = options
+      errand_command
     end
 
   end
