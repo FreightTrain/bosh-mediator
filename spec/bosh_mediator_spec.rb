@@ -17,9 +17,11 @@ module BoshMediator
       @release_command = double(Bosh::Cli::Command::Release)
       @deployment_command = double(Bosh::Cli::Command::Deployment.new)
       @errand_command = double(Bosh::Cli::Command::Deployment.new)
+      @job_command = double(Bosh::Cli::Command::JobManagement.new)
       @mediator = BoshMediator.new(:director => @bosh_director,
                                    :release_command => @release_command,
                                    :deployment_command => @deployment_command,
+                                   :job_command => @job_command,
                                    :errand_command => @errand_command)
       Dir.chdir(assets_dir)
     end
@@ -182,6 +184,19 @@ module BoshMediator
         @errand_command.should_receive(:run_errand).with('buy_groceries')
         @errand_command.should_receive(:exit_code).and_return(1)
         expect { @mediator.run_errand('buy_groceries') }.to raise_error
+      end
+    end
+
+    context 'when attempting to run a recreate' do
+      it 'runs the recreate command' do
+        @job_command.should_receive(:recreate_job).with('my_job',5)
+        @job_command.should_receive(:exit_code).and_return(0)
+        @mediator.recreate_job('my_job',5)
+      end
+      it 'raises if the recreate fails' do
+        @job_command.should_receive(:recreate_job).with('my_job',5)
+        @job_command.should_receive(:exit_code).and_return(1)
+        expect { @mediator.recreate_job('my_job',5) }.to raise_error
       end
     end
 

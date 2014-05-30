@@ -19,6 +19,7 @@ module BoshMediator
       @release_command = options[:release_command]
       @deployment_command = options[:deployment_command]
       @errand_command = options[:errand_command]
+      @job_command = options[:job_command]
       @release_manager = options[:release_manager] || ReleaseManager.new(options)
       @stemcell_manager = options[:stemcell_manager] || StemcellResourceManager.new
       Bosh::Cli::Config.output = STDOUT
@@ -29,6 +30,11 @@ module BoshMediator
     def deploy
       @deployment_command.perform
       BoshMediator.raise_on_error! @deployment_command
+    end
+
+    def recreate_job(job,index)
+      @job_command.recreate_job(job,index)
+      BoshMediator.raise_on_error! @job_command
     end
 
     def delete_deployment(name)

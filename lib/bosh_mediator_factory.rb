@@ -20,6 +20,7 @@ module BoshMediator
       BoshMediator.new(:director => bosh_director,
                        :release_command => release_command(options),
                        :deployment_command => deployment_command,
+                       :job_command => job_command(options),
                        :errand_command => errand_command(:target => bosh_director_uri, :username => username, :password => password))
     end
 
@@ -48,6 +49,12 @@ module BoshMediator
       errand_command = Bosh::Cli::Command::Errand.new
       errand_command.options = options
       errand_command
+    end
+
+    def job_command(options ={})
+      job_command = Bosh::Cli::Command::JobManagement.new
+      job_command.options = options
+      job_command
     end
 
   end
