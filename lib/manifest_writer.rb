@@ -10,7 +10,7 @@ module BoshMediator
       @spiff_dir = spiff_dir
     end
 
-    def parse_and_merge_file
+    def parse_and_merge_file(toggle_file_path = nil)
       output_manifest = File.join(Dir.pwd, 'output-manifest.yml')
 
       Dir.mktmpdir do |dir|
@@ -22,7 +22,7 @@ module BoshMediator
         end
 
         if @spiff_dir
-          spiff_merge(output_erb, output_manifest)
+          spiff_merge(output_erb, output_manifest, toggle_file_path)
         else
           FileUtils.cp(output_erb, output_manifest)
         end
@@ -55,17 +55,26 @@ module BoshMediator
       )
     end
 
-    def spiff_merge(erb_output_manifest, output_manifest)
+    def spiff_merge(erb_output_manifest, output_manifest, toggle_file_path = nil)
+
       files = ['networks.yml', 'env.yml'].map do |f| 
         path = File.join(@spiff_dir, f)
         path if File.exists?(path)
       end.compact.join(' ')
-      
+
       puts "*** Merging in Spiff templates ***"
       puts "*** - from #{@spiff_dir} ***"
       puts "*** - to #{output_manifest} ***"
 
-      `spiff merge #{erb_output_manifest} #{files} > #{output_manifest}`
+      if toggle_file_path == nil
+        spiff_command = "spiff merge #{erb_output_manifest} #{files} > #{output_manifest}"
+      else
+        raise "Can't read toggle file -  #{toggle_file_path}" unless File.exists?(toggle_file_path)
+        puts "*** With toggle file -  #{toggle_file_path} ***"
+        spiff_command = "spiff merge #{erb_output_manifest} #{toggle_file_path} #{files} #{toggle_file_path} > #{output_manifest}"
+      end
+
+      `#{spiff_command}`
       raise "Spiff error" unless $?.success?
     end
 
