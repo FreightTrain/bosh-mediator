@@ -37,6 +37,14 @@ module BoshMediator
       BoshMediator.raise_on_error! @job_command
     end
 
+    def stop_job(job, index, options={})
+      old_options = @job_command.options.dup
+      @job_command.options.merge!(options)
+      @job_command.stop_job(job,index)
+      @job_command.options = old_options
+      BoshMediator.raise_on_error! @job_command
+    end
+
     def delete_deployment(name)
       if bosh_contains_deployment?(name)
         @deployment_command.delete(name)

@@ -200,6 +200,32 @@ module BoshMediator
       end
     end
 
+    context 'when attempting to stop a job' do
+      before do
+        allow(@job_command).to receive(:options).and_return({})
+        allow(@job_command).to receive(:options=)
+      end
+      it 'runs the stop command' do
+        expect(@job_command).to receive(:stop_job).with('my_job', 5)
+        expect(@job_command).to receive(:exit_code).and_return(0)
+        @mediator.stop_job('my_job', 5)
+      end
+      it 'runs the stop command with options provided' do
+        options = instance_double(Hash)
+        @job_command.options = options
+        expect(@job_command.options).to receive(:merge!).with(hard: true)
+        expect(@job_command).to receive(:stop_job).with('my_job', 5)
+        expect(@job_command).to receive(:exit_code).and_return(0)
+        expect(@job_command).to receive(:options=).with({})
+        @mediator.stop_job('my_job', 5, hard: true)
+      end
+      it 'raises if the recreate fails' do
+        expect(@job_command).to receive(:stop_job).with('my_job', 5)
+        expect(@job_command).to receive(:exit_code).and_return(1)
+        expect { @mediator.stop_job('my_job', 5) }.to raise_error
+      end
+    end
+
     context 'when attempting to create a Bosh release' do
 
       it 'raises an exception if not in a releases directory when creating a release' do
