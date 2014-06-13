@@ -37,9 +37,9 @@ module BoshMediator
     context 'when initializing an instance of Bosh Mediator' do
 
       it 'configures bosh cli options' do
-        Bosh::Cli::Config.output.should eq STDOUT
-        Bosh::Cli::Config.interactive.should eq false
-        Bosh::Cli::Config.colorize.should eq true
+        expect(Bosh::Cli::Config.output).to eq STDOUT
+        expect(Bosh::Cli::Config.interactive).to eq false
+        expect(Bosh::Cli::Config.colorize).to eq true
       end
 
     end
@@ -93,7 +93,7 @@ module BoshMediator
 
       it 'does not attempt to upload a release that already exists in the bosh director by name and version' do
         test_release_file_name = "#{assets_dir}/existing_release_file.yml"
-        @bosh_director.should_receive(:list_releases).and_return(expected_release_array)
+        expect(@bosh_director).to receive(:list_releases).and_return(expected_release_array)
         allow(@release_command).to receive(:options).and_return({})
         @mediator.upload_release(test_release_file_name)
       end
@@ -103,17 +103,17 @@ module BoshMediator
         let(:test_release_file_name) { "#{assets_dir}/unexisting_release_file.yml" }
 
         before do
-          @bosh_director.should_receive(:list_releases).and_return(expected_release_array)
-          @release_command.should_receive(:upload).with(test_release_file_name)
+          expect(@bosh_director).to receive(:list_releases).and_return(expected_release_array)
+          expect(@release_command).to receive(:upload).with(test_release_file_name)
         end
 
         it 'attempts to upload the release' do
-          @release_command.should_receive(:exit_code).and_return(0)
+          expect(@release_command).to receive(:exit_code).and_return(0)
           @mediator.upload_release(test_release_file_name)
         end
 
         it 'raises when the upload fails' do
-          @release_command.should_receive(:exit_code).and_return(1)
+          expect(@release_command).to receive(:exit_code).and_return(1)
           expect{ @mediator.upload_release(test_release_file_name) }.to raise_error
         end
 
@@ -123,14 +123,14 @@ module BoshMediator
     context 'when attempting to deploy a release to Bosh' do
 
       it 'deploys a provided deployment manifest file' do
-        @deployment_command.should_receive(:perform)
-        @deployment_command.should_receive(:exit_code).and_return(0)
+        expect(@deployment_command).to receive(:perform)
+        expect(@deployment_command).to receive(:exit_code).and_return(0)
         @mediator.deploy
       end
 
       it 'raises when the deployment is unsuccessful' do
-        @deployment_command.should_receive(:perform)
-        @deployment_command.should_receive(:exit_code).and_return(1)
+        expect(@deployment_command).to receive(:perform)
+        expect(@deployment_command).to receive(:exit_code).and_return(1)
         expect{ @mediator.deploy }.to raise_error
       end
 
@@ -148,27 +148,27 @@ module BoshMediator
 
       it 'deletes any existing deployment' do
         deployment_name = 'deployment_c'
-        @bosh_director.should_receive(:list_deployments).and_return(expected_deployments)
-        @deployment_command.should_receive(:delete).with(deployment_name)
-        @deployment_command.should_receive(:exit_code).and_return(0)
+        expect(@bosh_director).to receive(:list_deployments).and_return(expected_deployments)
+        expect(@deployment_command).to receive(:delete).with(deployment_name)
+        expect(@deployment_command).to receive(:exit_code).and_return(0)
         @mediator.delete_deployment(deployment_name)
       end
 
       it 'raises if the deletion fails' do
         deployment_name = 'deployment_c'
-        @bosh_director.should_receive(:list_deployments).and_return(expected_deployments)
-        @deployment_command.should_receive(:delete).with(deployment_name)
-        @deployment_command.should_receive(:exit_code).and_return(1)
+        expect(@bosh_director).to receive(:list_deployments).and_return(expected_deployments)
+        expect(@deployment_command).to receive(:delete).with(deployment_name)
+        expect(@deployment_command).to receive(:exit_code).and_return(1)
         expect { @mediator.delete_deployment(deployment_name) }.to raise_error
       end
 
       it 'attempts to delete a deployment that does not exist' do
-        @bosh_director.should_receive(:list_deployments).and_return(expected_deployments)
+        expect(@bosh_director).to receive(:list_deployments).and_return(expected_deployments)
         @mediator.delete_deployment("some random deployment name")
       end
 
       it 'does not attempt to delete a deployment if there are no deployments' do
-        @bosh_director.should_receive(:list_deployments).and_return([])
+        expect(@bosh_director).to receive(:list_deployments).and_return([])
         @mediator.delete_deployment("some random deployment name")
       end
 
@@ -176,26 +176,26 @@ module BoshMediator
 
     context 'when attempting to run an errand' do
       it 'runs the errand' do
-        @errand_command.should_receive(:run_errand).with('buy_groceries')
-        @errand_command.should_receive(:exit_code).and_return(0)
+        expect(@errand_command).to receive(:run_errand).with('buy_groceries')
+        expect(@errand_command).to receive(:exit_code).and_return(0)
         @mediator.run_errand('buy_groceries')
       end
       it 'raises if the errand fails' do
-        @errand_command.should_receive(:run_errand).with('buy_groceries')
-        @errand_command.should_receive(:exit_code).and_return(1)
+        expect(@errand_command).to receive(:run_errand).with('buy_groceries')
+        expect(@errand_command).to receive(:exit_code).and_return(1)
         expect { @mediator.run_errand('buy_groceries') }.to raise_error
       end
     end
 
     context 'when attempting to run a recreate' do
       it 'runs the recreate command' do
-        @job_command.should_receive(:recreate_job).with('my_job',5)
-        @job_command.should_receive(:exit_code).and_return(0)
+        expect(@job_command).to receive(:recreate_job).with('my_job',5)
+        expect(@job_command).to receive(:exit_code).and_return(0)
         @mediator.recreate_job('my_job',5)
       end
       it 'raises if the recreate fails' do
-        @job_command.should_receive(:recreate_job).with('my_job',5)
-        @job_command.should_receive(:exit_code).and_return(1)
+        expect(@job_command).to receive(:recreate_job).with('my_job',5)
+        expect(@job_command).to receive(:exit_code).and_return(1)
         expect { @mediator.recreate_job('my_job',5) }.to raise_error
       end
     end
@@ -208,7 +208,7 @@ module BoshMediator
       end
 
       it 'creates a release' do
-        @release_command.should_receive(:create)
+        expect(@release_command).to receive(:create)
         @mediator.create_release("release_name")
       end
 
@@ -219,7 +219,7 @@ module BoshMediator
           test_dev_release_name = "foo"
           @mediator.set_dev_release_name(test_dev_release_name)
           actual_yaml = YAML.load_file(dev_release_config)
-          actual_yaml['dev_name'].should eq test_dev_release_name
+          expect(actual_yaml['dev_name']).to eq test_dev_release_name
         ensure
           File.delete dev_release_config if File.exists? dev_release_config
         end
@@ -265,8 +265,8 @@ module BoshMediator
         end
 
         it 'does not attempt to upload a stemcell that already exists in the bosh director' do
-          @bosh_director.should_receive(:list_stemcells).and_return(stemcell_list)
-          @bosh_director.should_not_receive(:upload_stemcell)
+          expect(@bosh_director).to receive(:list_stemcells).and_return(stemcell_list)
+          expect(@bosh_director).not_to receive(:upload_stemcell)
           @mediator.upload_stemcell_to_director(stemcell_test_asset)
         end
 
@@ -288,10 +288,10 @@ module BoshMediator
           downloaded_stemcell_file_path = "#{Dir.tmpdir}/#{stemcell_file_name}"
 
           @mediator.stemcell_manager = double(StemcellResourceManager)
-          @mediator.stemcell_manager.should_receive(:download_stemcell).with(stemcell_url).and_return(downloaded_stemcell_file_path)
-          @bosh_director.should_receive(:list_stemcells).and_return(stemcell_list)
-          @bosh_director.should_receive(:upload_stemcell).with(downloaded_stemcell_file_path)
-          @mediator.stemcell_manager.should_receive(:get_stemcell_name_and_version).with(downloaded_stemcell_file_path).and_return(stemcell_name_and_version)
+          expect(@mediator.stemcell_manager).to receive(:download_stemcell).with(stemcell_url).and_return(downloaded_stemcell_file_path)
+          expect(@bosh_director).to receive(:list_stemcells).and_return(stemcell_list)
+          expect(@bosh_director).to receive(:upload_stemcell).with(downloaded_stemcell_file_path)
+          expect(@mediator.stemcell_manager).to receive(:get_stemcell_name_and_version).with(downloaded_stemcell_file_path).and_return(stemcell_name_and_version)
 
           actual = @mediator.upload_stemcell_to_director(stemcell_url)
           expect(actual).to eq(stemcell_name_and_version)
@@ -300,9 +300,9 @@ module BoshMediator
 
         it 'successfully uploads a stemcell if a valid local file path is provided' do
           @mediator.stemcell_manager = double(StemcellResourceManager)
-          @mediator.stemcell_manager.should_receive(:get_stemcell_name_and_version).with(stemcell_test_asset).and_return(stemcell_name_and_version)
-          @bosh_director.should_receive(:list_stemcells).and_return(stemcell_list)
-          @bosh_director.should_receive(:upload_stemcell).with(stemcell_test_asset)
+          expect(@mediator.stemcell_manager).to receive(:get_stemcell_name_and_version).with(stemcell_test_asset).and_return(stemcell_name_and_version)
+          expect(@bosh_director).to receive(:list_stemcells).and_return(stemcell_list)
+          expect(@bosh_director).to receive(:upload_stemcell).with(stemcell_test_asset)
           actual = @mediator.upload_stemcell_to_director(stemcell_test_asset)
           expect(actual).to eq(stemcell_name_and_version)
         end
@@ -316,7 +316,7 @@ module BoshMediator
 
         it 'returns the stemcell info from a stemcell' do
           @mediator.stemcell_manager = StemcellResourceManager.new
-          @mediator.stemcell_manager.should_receive(:get_stemcell_name_and_version).with(stemcell_test_asset).and_return(stemcell_name_and_version)
+          expect(@mediator.stemcell_manager).to receive(:get_stemcell_name_and_version).with(stemcell_test_asset).and_return(stemcell_name_and_version)
           stemcell_info_result = @mediator.stemcell_manager.get_stemcell_info(stemcell_test_asset)
           expect(stemcell_info_result).to eq(stemcell_info)
         end

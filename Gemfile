@@ -5,6 +5,6 @@ gem 'bosh_cli', '~> 1.2579'
 gem 'erubis', '~> 2.7.0'
 
 group :test do
-  gem 'rspec', '~> 2.14.0'
+  gem 'rspec', '~> 3.0.0'
   gem 'rake', '~> 10.1.0'
 end

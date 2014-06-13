@@ -30,8 +30,8 @@ module BoshMediator
           expected_stemcell_file_contents = File.open(valid_stemcell, "rb") { |io| io.read }
 
           stubbed_response = double(::Net::HTTPResponse)
-          stubbed_response.stub(:parsed_response) { expected_stemcell_file_contents }
-          stubbed_response.stub(:code) { '304' }
+          allow(stubbed_response).to receive(:parsed_response).and_return(expected_stemcell_file_contents)
+          expect(stubbed_response).to receive(:code).and_return('304')
           expect_any_instance_of(::Net::HTTP).to receive(:request_get).with("/#{stemcell_file_name}",
             {'If-Modified-Since' => 'Wed, 6 Nov 2013 11:25:41 +0000'} ).and_yield(stubbed_response)
           stemcell_manager.download_stemcell(stemcell_url)
@@ -46,8 +46,8 @@ module BoshMediator
             expected_stemcell_file_contents = File.open(valid_stemcell, "rb") { |io| io.read }
 
             stubbed_response = double(::Net::HTTPResponse)
-            stubbed_response.stub(:resp) { expected_stemcell_file_contents }
-            stubbed_response.stub(:code) { '200' }
+            allow(stubbed_response).to receive(:resp).and_return(expected_stemcell_file_contents)
+            expect(stubbed_response).to receive(:code).and_return('200')
             expect_any_instance_of(::Net::HTTP).to receive(:request_get).with("/#{stemcell_file_name}", {} ).and_yield(stubbed_response)
             expect(stubbed_response).to receive(:read_body).and_yield(expected_stemcell_file_contents)
             local_downloaded_stemcell_resource = stemcell_manager.download_stemcell(stemcell_url)
@@ -65,7 +65,7 @@ module BoshMediator
         begin
           stemcell_url = "http://www.example.com/#{stemcell_file_name}"
           stubbed_response = double(::Net::HTTPResponse)
-          stubbed_response.stub(:code) { '404' }
+          expect(stubbed_response).to receive(:code).and_return('404')
           expect_any_instance_of(::Net::HTTP).to receive(:request_get).with("/#{stemcell_file_name}", {} ).and_yield(stubbed_response)
           expect do
             stemcell_manager.download_stemcell(stemcell_url)
