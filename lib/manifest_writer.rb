@@ -71,7 +71,7 @@ module BoshMediator
       else
         raise "Can't read toggle file -  #{toggle_file_path}" unless File.exists?(toggle_file_path)
         puts "*** With toggle file -  #{toggle_file_path} ***"
-        spiff_command = "spiff merge #{erb_output_manifest} #{toggle_file_path} #{files} #{toggle_file_path} > #{output_manifest}"
+        spiff_command = "spiff merge #{erb_output_manifest} #{files} #{toggle_file_path} > #{output_manifest}"
       end
 
       `#{spiff_command}`
